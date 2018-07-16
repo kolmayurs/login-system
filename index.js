@@ -3,11 +3,22 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors());
+/*app.use(cors());*/
 
 const port = (process.env.PORT || 4000);
 
-app.get('/', (req,res) => {
+const whitelist = ['http://localhost:4000', 'https://login-sys.herokuapp.com/']
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+app.get('/', cors(corsOptions), (req,res) => {
 	res.json('dook');
 })
 
